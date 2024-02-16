@@ -66,7 +66,7 @@ class ChirpController extends Controller
         // this takes in the request and validates it to make sure it is a string,
         // not null and max255 chars
         $validated = $request->validated();
-        
+
         $chirp->update($validated); //then it actually runs the route and updates the chirp taking in the validated role
 
         return redirect(route('chirps.index')); //finally it redirects the user to the chirps/index page
@@ -75,8 +75,12 @@ class ChirpController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chirp $chirp)
+    public function destroy(Chirp $chirp): RedirectResponse
     {
-        //
+        $this->authorize('delete', $chirp);
+
+        $chirp->delete();
+
+        return redirect(route('chirps.index'));
     }
 }
